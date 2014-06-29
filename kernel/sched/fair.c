@@ -3936,12 +3936,12 @@ static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
 static void
 enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
 {
-	/*
-	 * If we're the current task, we must renormalise before calling
-	 * update_curr().
+ 	/*
+  	 * If we're the current task, we must renormalise before calling
+  	 * update_curr().
 	 * Update the normalized vruntime before updating min_vruntime
 	 * through calling update_curr().
-	 */
+  	 */
 	if (!(flags & ENQUEUE_WAKEUP) || (flags & ENQUEUE_WAKING))
 		se->vruntime += cfs_rq->min_vruntime;
 
