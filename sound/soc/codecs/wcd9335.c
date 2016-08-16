@@ -11736,26 +11736,6 @@ err:
 	return ret;
 }
 
-static struct regulator *tasha_codec_find_ondemand_regulator(
-		struct snd_soc_codec *codec, const char *name)
-{
-	int i;
-	struct tasha_priv *tasha = snd_soc_codec_get_drvdata(codec);
-	struct wcd9xxx *wcd9xxx = tasha->wcd9xxx;
-	struct wcd9xxx_pdata *pdata = dev_get_platdata(codec->dev->parent);
-
-	for (i = 0; i < wcd9xxx->num_of_supplies; ++i) {
-		if (pdata->regulator[i].ondemand &&
-			wcd9xxx->supplies[i].supply &&
-			!strcmp(wcd9xxx->supplies[i].supply, name))
-			return wcd9xxx->supplies[i].consumer;
-	}
-
-	dev_dbg(tasha->dev, "Warning: regulator not found:%s\n",
-		name);
-	return NULL;
-}
-
 #ifdef CONFIG_SOUND_CONTROL
 void update_headphones_volume_boost(unsigned int vol_boost)
 {
@@ -11810,7 +11790,7 @@ void update_mic_gain(int vol_boost)
  	snd_soc_write(soundcontrol.snd_control_codec,
  		WCD9335_CDC_RX0_RX_VOL_MIX_CTL, boosted_val);
 
- 	pr_info("Sound Control: Boosted Speaker RX6 value %d\n",
+ 	pr_info("Sound Control: Boosted Mic RX0 value %d\n",
  		snd_soc_read(soundcontrol.snd_control_codec,
  		WCD9335_CDC_RX0_RX_VOL_CTL));
 }
