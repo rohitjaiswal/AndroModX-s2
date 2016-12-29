@@ -225,6 +225,17 @@ static const struct file_operations twa_fops = {
 	.llseek		= noop_llseek,
 };
 
+/*
+ * The controllers use an inline buffer instead of a mapped SGL for small,
+ * single entry buffers.  Note that we treat a zero-length transfer like
+ * a mapped SGL.
+ */
+static bool twa_command_mapped(struct scsi_cmnd *cmd)
+{
+	return scsi_sg_count(cmd) != 1 ||
+		scsi_bufflen(cmd) >= TW_MIN_SGL_LENGTH;
+}
+
 /* This function will complete an aen request from the isr */
 static int twa_aen_complete(TW_Device_Extension *tw_dev, int request_id)
 {
@@ -1843,8 +1854,7 @@ static int twa_scsiop_execute_scsi(TW_Device_Extension *tw_dev, int request_id, 
 		/* Map sglist from scsi layer to cmd packet */
 
 		if (scsi_sg_count(srb)) {
-			if ((scsi_sg_count(srb) == 1) &&
-			    (scsi_bufflen(srb) < TW_MIN_SGL_LENGTH)) {
+			if (!twa_command_mapped(srb)) {
 				if (srb->sc_data_direction == DMA_TO_DEVICE ||
 				    srb->sc_data_direction == DMA_BIDIRECTIONAL)
 					scsi_sg_copy_to_buffer(srb,
@@ -1917,7 +1927,7 @@ static void twa_scsiop_execute_scsi_complete(TW_Device_Extension *tw_dev, int re
 {
 	struct scsi_cmnd *cmd = tw_dev->srb[request_id];
 
-	if (scsi_bufflen(cmd) < TW_MIN_SGL_LENGTH &&
+	if (!twa_command_mapped(cmd) &&
 	    (cmd->sc_data_direction == DMA_FROM_DEVICE ||
 	     cmd->sc_data_direction == DMA_BIDIRECTIONAL)) {
 		if (scsi_sg_count(cmd) == 1) {
