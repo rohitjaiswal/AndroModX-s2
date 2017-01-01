@@ -1,0 +1,21 @@
+{
+  "name": "<b><font color=\"#FFFFFF\">AndroModX Kernel For LeEco Le 2</font></b>",
+  "short_description": "<b>AndroModX</b> Kernel For LeEco Le 2 By <b>rishabhrao</b>",
+  "logo": "https://s29.postimg.org/fl1595eyv/AMX_Logo.png",
+  "xda": "https://forum.xda-developers.com/le-2/development/andromodx-kernel-t3529576",
+  "github": "https://github.com/rishabhrao/AndroModX-s2",
+  "features": [
+    "Please Read XDA Post for the Full List of Features"
+  ],
+  "downloads": [
+    {
+      "name": "AndroModX",
+      "description": "AndroModX Kernel For LeEco Le 2",
+      "url": "https://forum.xda-developers.com/le-2/development/andromodx-kernel-t3529576",
+      "changelog": [
+        "Full Changelog in XDA Post"
+      ]
+    }
+  ]
+}
+
