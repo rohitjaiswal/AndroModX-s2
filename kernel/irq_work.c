@@ -158,11 +158,11 @@ static void irq_work_run_list(struct llist_head *list)
 	}
 }
 
-static void __irq_work_run(void)
+/* static void __irq_work_run(void)
 {
 	irq_work_run_list(&__get_cpu_var(raised_list));
 	irq_work_run_list(&__get_cpu_var(lazy_list));
-}
+} */
 
 /*
  * hotplug calls this through:
