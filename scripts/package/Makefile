@@ -45,7 +45,6 @@ rpm-pkg rpm: FORCE
 	$(MAKE) clean
 	ln -sf $(srctree) $(KERNELPATH)
 	$(CONFIG_SHELL) $(MKSPEC) >$(objtree)/kernel.spec
-	$(CONFIG_SHELL) $(srctree)/scripts/setlocalversion --save-scmversion
 	tar -cz $(RCS_TAR_IGNORE) -f $(KERNELPATH).tar.gz $(TAR_CONTENT)
 	rm $(KERNELPATH)
 	rm -f $(objtree)/.scmversion
