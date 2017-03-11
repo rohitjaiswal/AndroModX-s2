@@ -44,6 +44,25 @@ export CROSS_COMPILE="aarch64-linux-android-"
 # Compilation Scripts Are Below
 compile_kernel ()
 {
+# Clean Directories
+echo -e "$White***********************************************"
+echo "       Cleaning Kernel Directories                      "
+echo -e "***********************************************$nocol"
+OUTPUT_ZIP=$KERNEL_DIR/build/AndroModX.zip
+rm -fdr $KERNEL_DIR/build/AndroModX.zip
+rm -fdr $KERNEL_DIR/build/Image.gz-dtb
+rm -fdr $KERNEL_DIR/build/system/lib/modules
+mkdir -p $KERNEL_DIR/build/system/lib/modules/pronto
+make clean && make mrproper
+if [ -a $OUTPUT_ZIP ];
+then
+echo -e "$Red Cleaning Kernel Directories Failed! Fix the Errors! $nocol"
+exit 1
+else
+echo -e "$Yellow Directories Cleaned Successfully.$nocol"
+fi
+
+# Building AndroModX Kernel
 echo -e "$White***********************************************"
 echo "         Compiling AndroModX Kernel                     "
 echo -e "***********************************************$nocol"
@@ -69,4 +88,11 @@ compile_kernel
 esac
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
-echo -e "$Yellow Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
+echo -e "*******************************************************"
+echo -e "$Yellow Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol  "
+echo
+echo -e "$Yellow ENJOY AndroModX...$nocol                       "
+echo -e "*******************************************************"
+echo -e "$Yellow The Flashable Zip Output is at: '$OUTPUT_ZIP'...$nocol                       "
+echo -e "*******************************************************"
+
