@@ -34,12 +34,25 @@ Cyan='\e[0;36m'         # Cyan
 White='\e[0;37m'        # White
 nocol='\033[0m'         # Default
 
-# Tweakable Options Below
+# Initialization Script
+KERNEL_DIR=$PWD
+export PATH=$PATH:$KERNEL_DIR
+export PATH=$PATH:$KERNEL_DIR/../aarch64-linux-android-4.9
+export PATH=$PATH:$KERNEL_DIR/../aarch64-linux-android-4.9/bin
+PATH=$PATH$( find $KERNEL_DIR/../aarch64-linux-android-4.9 -type d -printf ":%p" )
+NAME=AndroModX
+VERSION=2.0
+DATE=$( date +'%d%m%Y' )
+
+# Tweakable Options
 export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER="rishabhrao"
 export KBUILD_BUILD_HOST="AndroModX"
 export CROSS_COMPILE="aarch64-linux-android-"
+DEFCONFIG=andromodx_defconfig
+IMAGE=$KERNEL_DIR/lazyflasher/Image.gz-dtb
+JOBS=64
 
 # Compilation Scripts Are Below
 compile_kernel ()
@@ -48,11 +61,9 @@ compile_kernel ()
 echo -e "$White***********************************************"
 echo "       Cleaning Kernel Directories                      "
 echo -e "***********************************************$nocol"
-OUTPUT_ZIP=$KERNEL_DIR/build/AndroModX.zip
-rm -fdr $KERNEL_DIR/build/AndroModX.zip
-rm -fdr $KERNEL_DIR/build/Image.gz-dtb
-rm -fdr $KERNEL_DIR/build/system/lib/modules
-mkdir -p $KERNEL_DIR/build/system/lib/modules/pronto
+OUTPUT_ZIP=$KERNEL_DIR/lazyflasher/$NAME-$VERSION-$DATE.zip
+rm -fdr $KERNEL_DIR/lazyflasher/$NAME-*.zip
+rm -fdr $KERNEL_DIR/lazyflasher/Image.gz-dtb
 make clean && make mrproper
 if [ -a $OUTPUT_ZIP ];
 then
@@ -66,11 +77,26 @@ fi
 echo -e "$White***********************************************"
 echo "         Compiling AndroModX Kernel                     "
 echo -e "***********************************************$nocol"
-make clean && make mrproper;
-make $DEFCONFIG;
-make -j$JOBS;
-
+make $DEFCONFIG
+make -j$JOBS
+make -j$JOBS modules
+cp $KERNEL_DIR/arch/arm64/boot/Image.gz-dtb $KERNEL_DIR/lazyflasher/Image.gz-dtb
 if ! [ -a $IMAGE ];
+then
+echo -e "$Red AndroModX Kernel Compilation Failed! Fix the Errors! $nocol"
+exit 1
+else
+echo -e "$Yellow AndroModX Kernel Compiled Successfully.$nocol"
+fi
+
+# Building AndroModX Installer
+echo -e "$White***********************************************"
+echo "     Building AndroModX Installer                 "
+echo -e "***********************************************$nocol"
+OUTPUT_ZIP=$KERNEL_DIR/lazyflasher/$NAME-$VERSION-$DATE.zip
+cd $KERNEL_DIR/lazyflasher
+make
+if ! [ -a $OUTPUT_ZIP ];
 then
 echo -e "$Red Kernel Compilation Failed! Fix the Errors! $nocol"
 exit 1

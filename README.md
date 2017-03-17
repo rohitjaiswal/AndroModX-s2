@@ -39,14 +39,14 @@ Release Date | June 2016
 - Download Toolchains (CAF Toolchains (Recommended) Used Below. Other Toolchains May Cause Problems.)
 
 
-		$ git clone https://source.codeaurora.org/quic/la/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b LA.BR.1.3.5.c1_rb1.3
+		$ git clone --recursive https://source.codeaurora.org/quic/la/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b LA.BR.1.3.5.c1_rb1.3
 
 
 
 - Download Kernel Sources
 
 
-		$ git clone https://github.com/rishabhrao/AndroModX-s2.git -b master
+		$ git clone --recursive https://github.com/rishabhrao/AndroModX-s2.git -b master
 
 
 
@@ -69,4 +69,4 @@ Release Date | June 2016
 ---------------
 
 
-- Kernel: arch/arm64/boot/Image.gz-dtb
+- Kernel Flashable zip: lazyflasher/AndroModX-2.0-"DATE".zip
