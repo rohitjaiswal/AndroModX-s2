@@ -39,7 +39,7 @@ Release Date | June 2016
 - Download Toolchains (CAF Toolchains (Recommended) Used Below. Other Toolchains May Cause Problems.)
 
 
-		$ git clone --recursive https://source.codeaurora.org/quic/la/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b LA.BR.1.3.5.c1_rb1.3
+		$ git clone --recursive https://source.codeaurora.org/quic/la/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b LA.BR.1.3.6_rb1.14
 
 
 
