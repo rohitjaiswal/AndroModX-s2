@@ -12,7 +12,7 @@
 #
 # Please maintain this if you use this script or any part of it
 
-# Init Script
+# Initialization Script
 : ${KERNEL_DIR:=$PWD}
 export PATH=$PATH:$KERNEL_DIR
 export PATH=$PATH:$KERNEL_DIR/../aarch64-linux-android-4.9
@@ -34,12 +34,7 @@ Cyan='\e[0;36m'         # Cyan
 White='\e[0;37m'        # White
 nocol='\033[0m'         # Default
 
-# Initialization Script
-KERNEL_DIR=$PWD
-export PATH=$PATH:$KERNEL_DIR
-export PATH=$PATH:$KERNEL_DIR/../aarch64-linux-android-4.9
-export PATH=$PATH:$KERNEL_DIR/../aarch64-linux-android-4.9/bin
-PATH=$PATH$( find $KERNEL_DIR/../aarch64-linux-android-4.9 -type d -printf ":%p" )
+# Variables
 NAME=AndroModX
 VERSION=2.0
 DATE=$( date +'%d%m%Y' )
