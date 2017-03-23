@@ -59,11 +59,12 @@ echo -e "$White***********************************************"
 echo "       Cleaning Kernel Directories                      "
 echo -e "***********************************************$nocol"
 OUTPUT_ZIP=$KERNEL_DIR/lazyflasher/$NAME-$VERSION-$DATE.zip
-rm -fdr $KERNEL_DIR/output/$NAME-*.zip
+rm -fdr $KERNEL_DIR/output/EUI-$NAME-*.zip
 rm -fdr $KERNEL_DIR/lazyflasher/$NAME-*.zip
 rm -fdr $KERNEL_DIR/lazyflasher/Image.gz-dtb
 rm -fdr $KERNEL_DIR/lazyflasher/modules/wlan.ko
 rm -fdr $KERNEL_DIR/lazyflasher/modules/pronto/pronto_wlan.ko
+mkdir -p $KERNEL_DIR/lazyflasher/modules/pronto
 make clean && make mrproper
 if [ -a $OUTPUT_ZIP ];
 then
@@ -73,44 +74,52 @@ else
 echo -e "$Yellow Directories Cleaned Successfully.$nocol"
 fi
 
-# Building AndroModX Normal Kernel
+# Building AndroModX EUI Kernel
 echo -e "$White***********************************************"
-echo "         Compiling AndroModX Normal Kernel              "
+echo "         Compiling AndroModX EUI Kernel              "
 echo -e "***********************************************$nocol"
+sed -i '/CONFIG_PRONTO_WLAN=y/c\CONFIG_PRONTO_WLAN=m' $KERNEL_DIR/arch/arm64/configs/andromodx_defconfig
+sed -i '/CONFIG_MODULE_FORCE_LOAD=n/c\CONFIG_MODULE_FORCE_LOAD=y' $KERNEL_DIR/arch/arm64/configs/andromodx_defconfig
 make $DEFCONFIG
 make -j$JOBS
 make -j$JOBS modules
 cp $KERNEL_DIR/arch/arm64/boot/Image.gz-dtb $KERNEL_DIR/lazyflasher/Image.gz-dtb
+cp $KERNEL_DIR/drivers/staging/prima/wlan.ko $KERNEL_DIR/lazyflasher/modules/wlan.ko
+cp $KERNEL_DIR/drivers/staging/prima/wlan.ko $KERNEL_DIR/lazyflasher/modules/pronto/pronto_wlan.ko
+scripts/sign-file.sh sha512 signing_key.priv signing_key.x509 $KERNEL_DIR/lazyflasher/modules/wlan.ko
+scripts/sign-file.sh sha512 signing_key.priv signing_key.x509 $KERNEL_DIR/lazyflasher/modules/pronto/pronto_wlan.ko
+sed -i '/CONFIG_PRONTO_WLAN=m/c\CONFIG_PRONTO_WLAN=y' $KERNEL_DIR/arch/arm64/configs/andromodx_defconfig
+sed -i '/CONFIG_MODULE_FORCE_LOAD=y/c\CONFIG_MODULE_FORCE_LOAD=n' $KERNEL_DIR/arch/arm64/configs/andromodx_defconfig
 if ! [ -a $IMAGE ];
 then
-echo -e "$Red AndroModX Normal Kernel Compilation Failed! Fix the Errors! $nocol"
+echo -e "$Red AndroModX EUI Kernel Compilation Failed! Fix the Errors! $nocol"
 exit 1
 else
-echo -e "$Yellow AndroModX Normal Kernel Compiled Successfully.$nocol"
+echo -e "$Yellow AndroModX EUI Kernel Compiled Successfully.$nocol"
 fi
 
-# Building AndroModX Normal Kernel Installer
+# Building AndroModX EUI Kernel Installer
 echo -e "$White***********************************************"
-echo "     Building AndroModX Normal Kernel Installer         "
+echo "     Building AndroModX EUI Kernel Installer         "
 echo -e "***********************************************$nocol"
 OUTPUT_ZIP=$KERNEL_DIR/lazyflasher/$NAME-$VERSION-$DATE.zip
 cd $KERNEL_DIR/lazyflasher
 make
 if ! [ -a $OUTPUT_ZIP ];
 then
-echo -e "$Red Normal Kernel Compilation Failed! Fix the Errors! $nocol"
+echo -e "$Red EUI Kernel Compilation Failed! Fix the Errors! $nocol"
 exit 1
 fi
 
-# Copying AndroModX Normal Kernel Installer to Out Directory
+# Copying AndroModX EUI Kernel Installer to Out Directory
 echo -e "$White***********************************************"
-echo "    Copying AndroModX Normal Kernel Installer to out    "
+echo "    Copying AndroModX EUI Kernel Installer to out    "
 echo -e "***********************************************$nocol"
-OUTPUT_ZIP=$KERNEL_DIR/output/$NAME-$VERSION-$DATE.zip
-cp $KERNEL_DIR/lazyflasher/$NAME-$VERSION-$DATE.zip $KERNEL_DIR/output/$NAME-$VERSION-$DATE.zip
+OUTPUT_ZIP=$KERNEL_DIR/output/EUI-$NAME-$VERSION-$DATE.zip
+cp $KERNEL_DIR/lazyflasher/$NAME-$VERSION-$DATE.zip $KERNEL_DIR/output/EUI-$NAME-$VERSION-$DATE.zip
 if ! [ -a $OUTPUT_ZIP ];
 then
-echo -e "$Copying AndroModX Normal Kernel Installer to out Failed! Fix the Errors! $nocol"
+echo -e "$Copying AndroModX EUI Kernel Installer to out Failed! Fix the Errors! $nocol"
 exit 1
 fi
 }

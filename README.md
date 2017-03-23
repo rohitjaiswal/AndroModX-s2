@@ -59,8 +59,14 @@ cd AndroModX-s2
 
 - Compile the Kernel
 
+For Building Normally:
 ```
 ./build.sh
+```
+
+For Building for EUI/MIUI:
+```
+./build-eui.sh
 ```
 
 
@@ -69,5 +75,5 @@ cd AndroModX-s2
 ---------------
 
 ```
-- Kernel Flashable zip: lazyflasher/AndroModX-2.0-"DATE".zip
+- Kernel Flashable zips: output/
 ```
